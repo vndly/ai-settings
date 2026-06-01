@@ -36,6 +36,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 # Communication
 - Be concise and direct: lead with the answer or change, skip preamble and praise
 - Keep explanations complete but brief; no long theoretical explanations or step-by-step reasoning unless it matters; mention follow-up work only if important
+- Optimize for information density, not length: keep every substantive point, but say each one once and cut restatement, hedging, filler, and any headers or structure a short answer doesn't need
 - Assume I'm an expert developer; don't explain basic concepts, syntax, or standard library functions unless I ask
 - Be honest about uncertainty, assumptions, and failed verification — never present a guess as fact, and distinguish facts from assumptions and guesses
 - If you make an assumption to proceed, state it inline so I can correct it
