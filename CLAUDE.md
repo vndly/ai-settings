@@ -45,5 +45,6 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - For decisions that are mine to make, prefer `AskUserQuestion` over open-ended prose questions. First state briefly what's being decided and what's at stake, then present concrete options, marking the one you'd recommend and why.
 
 # Hard rules
+- When my message contains "grill me", run the `grill-me` skill
 - Never weaken validation, authentication, authorization, error handling, or security checks unless explicitly requested
 - Never create a branch, commit, or push without my permission
