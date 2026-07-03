@@ -46,11 +46,11 @@ if [ "$USAGE" != "null" ]; then
     CONTEXT_COLOR=$(get_color "$PERCENT_USED")
     WINDOW_BAR=$(progress_bar "$WINDOW")
     WINDOW_COLOR=$(get_color "$WINDOW")
-    echo "${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}${PERCENT_USED}%${N} ${W}| Window:${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N} ${W}${WINDOW_TIME}${N}"
+    echo "${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}${PERCENT_USED}%${N}${W} Window:${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N} ${W}${WINDOW_TIME}${N}"
 else
     CONTEXT_BAR=$(progress_bar 0)
     CONTEXT_COLOR=$(get_color 0)
     WINDOW_BAR=$(progress_bar "$WINDOW")
     WINDOW_COLOR=$(get_color "$WINDOW")
-    echo "${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}0%${N} ${W}| Window:${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N} ${W}${WINDOW_TIME}${N}"
+    echo "${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}0%${N}${W} Window:${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N} ${W}${WINDOW_TIME}${N}"
 fi
