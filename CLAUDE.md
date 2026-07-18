@@ -48,3 +48,4 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - When my message contains "grill me", run the `grill-me` skill
 - Never weaken validation, authentication, authorization, error handling, or security checks unless explicitly requested
 - Never create a branch, commit, or push without my permission
+- Never create a GitHub repository without my permission
