@@ -1,6 +1,9 @@
 # Claude Code Settings
 
-Copy the following items to the folder `~/.claude`:
-* File `settings.json`
-* File `CLAUDE.md`
-* Folders `data` and `scripts`
+1. Clone the repository
+2. Run the command `./deploy.sh`
+  * This command copies the following items to the folder `~/.claude`:
+    * File `settings.json`
+    * File `CLAUDE.md`
+    * Folder `data`
+    * Folder `scripts`
