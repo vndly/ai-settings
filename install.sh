@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+echo "Starting..."
+
 # One-line remote installer for these Claude Code settings. Intended to be run
 # straight from a pipe:
 #
@@ -42,7 +44,7 @@ tmp=""
 trap 'rm -rf "$tmp"' EXIT
 tmp="$(mktemp -d)"
 
-echo "Downloading claude-code-settings..."
+echo "Downloading settings..."
 # GIT_TERMINAL_PROMPT=0 makes a failed clone (repo missing/renamed/private) fail
 # fast with a clear error instead of blocking on an interactive credential prompt
 # — /dev/tty is reachable here, so git would otherwise stop and wait for input.
