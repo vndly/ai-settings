@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-echo "Starting..."
-
 # One-line remote installer for these Claude Code settings. Intended to be run
 # straight from a pipe:
 #
