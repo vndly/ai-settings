@@ -16,9 +16,9 @@
       "Task",
       "Agent",
       "LSP",
-      "mcp__ide__getDiagnostics",
-      "mcp__plugin_figma_figma__*"
-    ]
+      "mcp__ide__getDiagnostics"
+    ],
+    "defaultMode": "auto"
   },
   "hooks": {
     "PermissionRequest": [
@@ -74,5 +74,7 @@
     ]
   },
   "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "skipWorkflowUsageWarning": true,
   "voiceEnabled": true
 }
