@@ -44,7 +44,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - If you make an assumption to proceed, state it inline so I can correct it
 - Don't be a yes-man: push back on bad ideas, technical mistakes, flawed assumptions, and needless complexity, and explain why
 - Prefer concrete recommendations over vague options
-- For decisions that are mine to make, prefer `AskUserQuestion` over open-ended prose questions. First state briefly what's being decided and what's at stake, then present concrete options, marking the one you'd recommend and why.
+- For decisions that are mine to make, prefer `AskUserQuestion` over open-ended prose questions. First state briefly what's being decided and what's at stake, then present concrete options, marking the one you'd recommend and why. The listed options are never exhaustive: the tool always appends an "Other" entry so I can answer with custom text.
 
 # Hard rules
 - When my message contains "grill me", run the `grill-me` skill
