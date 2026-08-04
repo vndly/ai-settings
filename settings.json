@@ -65,9 +65,9 @@
       "source": {
         "source": "github",
         "repo": "vndly/marketplace"
-      }
-    },
-    "autoUpdate": true
+      },
+      "autoUpdate": true
+    }
   },
   "spinnerVerbs": {
     "mode": "replace",
