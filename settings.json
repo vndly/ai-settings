@@ -58,14 +58,16 @@
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
-      }
+      },
+      "autoUpdate": true
     },
     "vndly": {
       "source": {
         "source": "github",
         "repo": "vndly/marketplace"
       }
-    }
+    },
+    "autoUpdate": true
   },
   "spinnerVerbs": {
     "mode": "replace",
