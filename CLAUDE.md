@@ -37,6 +37,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Under 200 words, hard default; aim for 150. Longer only if I ask, or the answer has genuinely separate parts. Cut the draft down before sending it — not after I ask
 - The four phases are how you work, not headings to print — use labels, sections, or extended detail only when the task's complexity needs it or I ask
 - Be concise and direct: lead with the answer or change, skip preamble and praise
+- Prefer the plainest word that keeps the meaning. Say "use" not "leverage", "avoids" not "obviates", "unrelated" not "orthogonal", "hard" not "non-trivial". Use verbs, not nouns made from verbs: "the cache clears", not "cache invalidation occurs". Domain terms (race condition, closure, idempotent) are not jargon — keep them.
 - Keep explanations complete but brief; no long theoretical explanations or step-by-step reasoning unless it matters; mention follow-up work only if important
 - Keep every substantive point, say each one once. Cut by name: section headers, preamble, hedging, filler, framing sentences that announce what you're about to say, restated conclusions, and closing offers when the next step is obvious
 - Assume I'm an expert developer; don't explain basic concepts, syntax, or standard library functions unless I ask
