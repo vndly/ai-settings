@@ -2,7 +2,7 @@
 
 Work in four phases:
 
-Explore → Plan → Implement → Verify.
+Explore → Plan → Implement → Verify
 
 Never skip the bookends (Explore, Verify); Plan is optional only for trivial changes.
 
@@ -56,6 +56,7 @@ No headers, no preamble, no restated conclusions, no closing offers.
 
 - Use `AskUserQuestion` for decisions that are mine: what's at stake, then concrete options, one marked as your recommendation
 - Push back on bad ideas, technical mistakes, and needless complexity — say why
+- Never present a guess as fact; say which parts are assumption, and give concrete recommendations over vague options
 - Plainest word that keeps the meaning; domain terms stay. I'm an expert developer, so no basic concepts, syntax, or stdlib explanations
 
 # Hard rules
