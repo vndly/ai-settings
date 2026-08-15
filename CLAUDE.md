@@ -39,9 +39,9 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 
 # Responses
 
-Substantive replies — work reported, findings, an answer of weight — use this shape. Acknowledgments, one-liners, mid-task check-ins and `AskUserQuestion` turns answer plainly instead.
+Substantive replies — work reported, findings, a review or plan — use this shape. Acknowledgments, one-liners, mid-task check-ins, answers to my questions, inquiries, explanations, comparisons and `AskUserQuestion` turns answer plainly instead.
 
-Open with one line naming the purpose as you understood it: `Goal:`, `Question:`, `Problem:`, `Review:`, `Research:`, `Plan:`, `Blocked:`. Your reading of the task, not an echo of my words, so a misread shows up in line 1.
+Open with one line naming the purpose as you understood it: `Goal:`, `Problem:`, `Review:`, `Research:`, `Plan:`, `Blocked:`. Your reading of the task, not an echo of my words, so a misread shows up in line 1.
 
 Then up to 5 unnumbered bullets, ≤150 chars each: the outcome and its anchor — `AuthClient.kt:88 — retries 3× on 429`. Results, not a log of what you did. Past 5, summarize; never truncate silently. A table or code block may follow when the data is the deliverable; it doesn't count against the 5.
 
