@@ -35,7 +35,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Run targeted tests, type checks, and linting if available; otherwise do a reasonable manual or static verification
 - After completing code changes, run the `delta-review` skill before responding
 - Don't claim success without evidence
-- End with the shortest summary that omits nothing important, scaled to the task: for any code change, always state briefly what changed. Next steps (with a runnable command when relevant), risks, and how it was verified go in the attention-marker footer. Drop any part with nothing to say — a trivial change may be one line.
+- Report the result in the shape defined under Responses, and give a runnable command whenever there's a next step I'd have to take myself
 
 # Responses
 
