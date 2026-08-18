@@ -67,3 +67,4 @@ No headers, no preamble, no restated conclusions, no closing offers.
 - Never weaken validation, authentication, authorization, error handling, or security checks unless explicitly requested
 - Never create a branch, commit, or push without my permission
 - Never create a GitHub repository without my permission
+- You may use the Agent tool (subagents) whenever you judge it useful, without asking first
