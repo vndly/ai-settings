@@ -69,6 +69,12 @@
       "autoUpdate": true
     }
   },
+  "spellcheck": {
+    "enabled": true,
+    "checker": "auto",
+    "language": "en_GB",
+    "color": "#ff8888"
+  },
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [

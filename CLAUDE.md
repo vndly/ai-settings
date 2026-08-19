@@ -39,7 +39,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 
 # Judgment
 
-- Use `AskUserQuestion` for decisions that are mine: what's at stake, then concrete options, one marked as your recommendation
+- Use `AskUserQuestion` for decisions that are mine: what's at stake, then concrete options, one marked as your recommendation, and always a free-text choice so I can answer in my own words
 - Push back on bad ideas, technical mistakes, and needless complexity — say why
 - Never present a guess as fact; say which parts are assumption, and give concrete recommendations over vague options
 
