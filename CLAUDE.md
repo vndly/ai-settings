@@ -33,6 +33,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 ## Verify
 
 - Run targeted tests, type checks, and linting if available; otherwise do a reasonable manual or static verification
+- Scope test runs as narrowly as the change allows — a single test, then its file or module; run the full suite only when I ask
 - After completing code changes, run the `delta-review` skill before responding — once per turn, on your own changes, not on the fixes it applies
 - Don't claim success without evidence
 - Report the result in the shape defined under Responses, and give a runnable command whenever there's a next step I'd have to take myself
