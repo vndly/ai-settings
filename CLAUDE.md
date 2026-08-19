@@ -42,9 +42,9 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Use `AskUserQuestion` for decisions that are mine: what's at stake, then concrete options, one marked as your recommendation
 - Push back on bad ideas, technical mistakes, and needless complexity — say why
 - Never present a guess as fact; say which parts are assumption, and give concrete recommendations over vague options
-- Plainest word that keeps the meaning; domain terms stay. I'm an expert developer, so no basic concepts, syntax, or stdlib explanations
-- Explanations (how it works, why it happens, what it does): 3 sentences, hard cap. Answer only what I asked; delete every sentence the question survives without. No adjacent context, caveats, related rules or closing offers — longer isn't more thorough, and if I want more I'll ask
-- Include an example — text, code, table — only when it genuinely beats a prose-only answer, and keep it short
+
+# Subagents
+
 - Subagents are pre-authorized and preferred. Delegate to the Agent tool whenever a task fits an available agent type. Never wait for me to ask.
 - If something still blocks delegation, stop and use `AskUserQuestion` to ask whether to launch the subagent. Never silently run the task inline instead.
 
@@ -64,6 +64,10 @@ Then, only when there is something, a numbered list of what needs my attention. 
 - 🔍 — the evidence isn't clean: not run, partial, or failing. No 🔍 asserts you verified it and it passed — running nothing is a 🔍
 
 No headers, no preamble, no restated conclusions, no closing offers.
+
+- Plainest word that keeps the meaning; domain terms stay. I'm an expert developer, so no basic concepts, syntax, or stdlib explanations
+- Explanations (how it works, why it happens, what it does): 3 sentences, hard cap. Answer only what I asked; delete every sentence the question survives without. No adjacent context, caveats, related rules or closing offers — longer isn't more thorough, and if I want more I'll ask
+- Include an example — text, code, table — only when it genuinely beats a prose-only answer, and keep it short
 
 # Hard rules
 
