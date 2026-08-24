@@ -1,3 +1,4 @@
+# BEGIN ai-settings managed rules
 # Enforce the permission boundaries from AGENTS.md for host-level commands.
 
 prefix_rule(
@@ -81,3 +82,5 @@ prefix_rule(
         "gh repo list",
     ],
 )
+
+# END ai-settings managed rules

@@ -60,9 +60,10 @@ preview_folder() {
 # previewed and deployed content cannot drift. Cleaned up on every exit path.
 CLAUDE_MERGED_SETTINGS=""
 CODEX_MERGED_CONFIG=""
+CODEX_MERGED_RULES=""
 
 cleanup() {
-    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG"
+    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG" "$CODEX_MERGED_RULES"
 }
 trap cleanup EXIT
 
@@ -123,6 +124,8 @@ write_claude() {
 
 CODEX_INPUT="$INPUT/codex"
 CODEX_OUTPUT="${CODEX_HOME:-$HOME/.codex}"
+CODEX_RULES_SOURCE="$CODEX_INPUT/rules/default.rules"
+CODEX_RULES_TARGET="$CODEX_OUTPUT/rules/default.rules"
 
 preview_codex() {
     echo
@@ -146,9 +149,21 @@ preview_codex() {
         echo "NEW:       config.toml (target does not exist, will be created)"
     fi
 
-    # Use a repository-specific rules file so Codex's learned default.rules
-    # approvals survive deployment.
-    preview_folder "$CODEX_INPUT/rules" "$CODEX_OUTPUT/rules" "rules"
+    # default.rules: replace only this repository's marked block so rules Codex
+    # learned locally survive and repeated deploys do not duplicate entries.
+    if [ -f "$CODEX_RULES_TARGET" ]; then
+        CODEX_MERGED_RULES="$(mktemp)"
+        awk -f "$CODEX_INPUT/scripts/merge-rules.awk" \
+            "$CODEX_RULES_TARGET" \
+            "$CODEX_RULES_SOURCE" > "$CODEX_MERGED_RULES"
+        preview_file "$CODEX_MERGED_RULES" "$CODEX_RULES_TARGET" "rules/default.rules (merged)"
+    else
+        echo "NEW:       rules/default.rules (target does not exist, will be created)"
+    fi
+
+    if [ -f "$CODEX_OUTPUT/rules/ai-settings.rules" ]; then
+        echo "REMOVE:    rules/ai-settings.rules (replaced by rules/default.rules)"
+    fi
 }
 
 write_codex() {
@@ -163,7 +178,14 @@ write_codex() {
         cp "$CODEX_INPUT/config.toml" "$CODEX_OUTPUT/config.toml"
     fi
 
-    cp -R "$CODEX_INPUT/rules/." "$CODEX_OUTPUT/rules/"
+    if [ -n "$CODEX_MERGED_RULES" ]; then
+        mv "$CODEX_MERGED_RULES" "$CODEX_RULES_TARGET"
+        CODEX_MERGED_RULES=""
+    else
+        cp "$CODEX_RULES_SOURCE" "$CODEX_RULES_TARGET"
+    fi
+
+    rm -f -- "$CODEX_OUTPUT/rules/ai-settings.rules"
 
     echo "Deployed Codex settings to $CODEX_OUTPUT"
 }
