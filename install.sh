@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# One-line remote installer for these Claude Code settings. Intended to be run
+# One-line remote installer for these AI agent settings. Intended to be run
 # straight from a pipe:
 #
 #   curl -fsSL https://raw.githubusercontent.com/vndly/ai-settings/main/install.sh | bash
@@ -16,7 +16,7 @@ BRANCH="main"
 # --- Preconditions ----------------------------------------------------------
 
 # The clone needs git; deploy.sh additionally needs git (for its --no-index
-# diffs) and jq (for the settings merge). Fail early with a clear message.
+# diffs) and jq (for the Claude settings merge). Fail early with a clear message.
 for cmd in git jq; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "Error: '$cmd' is required but not installed." >&2

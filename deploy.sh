@@ -3,12 +3,14 @@
 set -euo pipefail
 
 INPUT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUTPUT="$HOME/.claude"
 
-# Temp file holding the merged settings.json, computed during the preview and
-# reused by the write phase so the two can never drift. Cleaned up on exit.
-MERGED_SETTINGS=""
-trap 'rm -f "$MERGED_SETTINGS"' EXIT
+# Deploys the settings for every supported agent. Each agent gets its own folder
+# in this repository and its own preview_*/write_* pair below, since the target
+# directory, the file set and the merge strategy all differ per agent. The
+# preview phase runs first for every agent, then a single confirmation gates the
+# write phase.
+
+# --- Generic helpers --------------------------------------------------------
 
 # preview_file <src> <tgt> <label>
 # Print a one-line status for the file and, when it changed, a colored diff of
@@ -41,36 +43,83 @@ preview_file() {
     git diff --no-index --color=auto -- "$tgt" "$src" || true
 }
 
+# preview_folder <src_dir> <tgt_dir> <label>
+# Preview the flat files of a folder, mirroring what `cp -R` will place. Nested
+# directories are skipped, matching the layout the agent folders actually use.
+preview_folder() {
+    local src_dir="$1" tgt_dir="$2" label="$3"
+
+    local src
+    for src in "$src_dir/"*; do
+        [ -f "$src" ] || continue
+        preview_file "$src" "$tgt_dir/$(basename "$src")" "$label/$(basename "$src")"
+    done
+}
+
+# --- Claude Code ------------------------------------------------------------
+
+CLAUDE_INPUT="$INPUT/claude"
+CLAUDE_OUTPUT="$HOME/.claude"
+
+# Temp file holding the merged settings.json, computed during the preview and
+# reused by the write phase so the two can never drift. Cleaned up on exit.
+CLAUDE_MERGED_SETTINGS=""
+trap 'rm -f "$CLAUDE_MERGED_SETTINGS"' EXIT
+
+preview_claude() {
+    echo "Claude Code -> $CLAUDE_OUTPUT"
+    echo
+
+    # CLAUDE.md: straight overwrite.
+    preview_file "$CLAUDE_INPUT/CLAUDE.md" "$CLAUDE_OUTPUT/CLAUDE.md" "CLAUDE.md"
+
+    # settings.json: deep-merge into the existing file so locally-added keys
+    # (extra enabledPlugins, marketplaces, etc.) survive. jq's "*" recursively
+    # merges objects with the right operand winning, so the repo's values take
+    # precedence. Preview the *merged result* (not the raw source) against the
+    # current target, since that is what the write phase will actually produce.
+    if [ -f "$CLAUDE_OUTPUT/settings.json" ]; then
+        CLAUDE_MERGED_SETTINGS="$(mktemp)"
+        jq -s '.[0] * .[1]' "$CLAUDE_OUTPUT/settings.json" "$CLAUDE_INPUT/settings.json" > "$CLAUDE_MERGED_SETTINGS"
+        preview_file "$CLAUDE_MERGED_SETTINGS" "$CLAUDE_OUTPUT/settings.json" "settings.json (merged)"
+    else
+        echo "NEW:       settings.json (target does not exist, will be created)"
+    fi
+
+    preview_folder "$CLAUDE_INPUT/data" "$CLAUDE_OUTPUT/data" "data"
+    preview_folder "$CLAUDE_INPUT/scripts" "$CLAUDE_OUTPUT/scripts" "scripts"
+}
+
+write_claude() {
+    # Make sure the target folders exist
+    mkdir -p "$CLAUDE_OUTPUT/data" "$CLAUDE_OUTPUT/scripts"
+
+    # CLAUDE.md: safe to overwrite outright
+    cp "$CLAUDE_INPUT/CLAUDE.md" "$CLAUDE_OUTPUT/CLAUDE.md"
+
+    # settings.json: reuse the merged file built during the preview when the
+    # target already existed; otherwise this is a first deploy, so copy the
+    # source as-is.
+    if [ -n "$CLAUDE_MERGED_SETTINGS" ]; then
+        mv "$CLAUDE_MERGED_SETTINGS" "$CLAUDE_OUTPUT/settings.json"
+        CLAUDE_MERGED_SETTINGS=""
+    else
+        cp "$CLAUDE_INPUT/settings.json" "$CLAUDE_OUTPUT/settings.json"
+    fi
+
+    # Copy the folder contents
+    cp -R "$CLAUDE_INPUT/data/." "$CLAUDE_OUTPUT/data/"
+    cp -R "$CLAUDE_INPUT/scripts/." "$CLAUDE_OUTPUT/scripts/"
+
+    echo "Deployed Claude Code settings to $CLAUDE_OUTPUT"
+}
+
 # --- Preview (read-only) ----------------------------------------------------
 
-echo "Previewing changes against $OUTPUT"
+echo "Previewing changes"
 echo
 
-# CLAUDE.md: straight overwrite.
-preview_file "$INPUT/CLAUDE.md" "$OUTPUT/CLAUDE.md" "CLAUDE.md"
-
-# settings.json: deep-merge into the existing file so locally-added keys (extra
-# enabledPlugins, marketplaces, etc.) survive. jq's "*" recursively merges
-# objects with the right operand winning, so the repo's values take precedence.
-# Preview the *merged result* (not the raw source) against the current target,
-# since that is what the write phase will actually produce.
-if [ -f "$OUTPUT/settings.json" ]; then
-    MERGED_SETTINGS="$(mktemp)"
-    jq -s '.[0] * .[1]' "$OUTPUT/settings.json" "$INPUT/settings.json" > "$MERGED_SETTINGS"
-    preview_file "$MERGED_SETTINGS" "$OUTPUT/settings.json" "settings.json (merged)"
-else
-    echo "NEW:       settings.json (target does not exist, will be created)"
-fi
-
-# Folder contents (flat files only, mirroring what cp -R will place).
-for src in "$INPUT/data/"*; do
-    [ -f "$src" ] || continue
-    preview_file "$src" "$OUTPUT/data/$(basename "$src")" "data/$(basename "$src")"
-done
-for src in "$INPUT/scripts/"*; do
-    [ -f "$src" ] || continue
-    preview_file "$src" "$OUTPUT/scripts/$(basename "$src")" "scripts/$(basename "$src")"
-done
+preview_claude
 
 # --- Confirm ----------------------------------------------------------------
 
@@ -87,23 +136,4 @@ esac
 
 # --- Write ------------------------------------------------------------------
 
-# Make sure the target folders exist
-mkdir -p "$OUTPUT/data" "$OUTPUT/scripts"
-
-# CLAUDE.md: safe to overwrite outright
-cp "$INPUT/CLAUDE.md" "$OUTPUT/CLAUDE.md"
-
-# settings.json: reuse the merged file built during the preview when the target
-# already existed; otherwise this is a first deploy, so copy the source as-is.
-if [ -n "$MERGED_SETTINGS" ]; then
-    mv "$MERGED_SETTINGS" "$OUTPUT/settings.json"
-    MERGED_SETTINGS=""
-else
-    cp "$INPUT/settings.json" "$OUTPUT/settings.json"
-fi
-
-# Copy the folder contents
-cp -R "$INPUT/data/." "$OUTPUT/data/"
-cp -R "$INPUT/scripts/." "$OUTPUT/scripts/"
-
-echo "Deployed Claude Code settings to $OUTPUT"
+write_claude
