@@ -4,6 +4,10 @@ set -euo pipefail
 
 INPUT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Claude Code and Antigravity play the same notification sound, so it lives once
+# in this repository's data folder and is copied into each of their data folders.
+NOTIFICATION_SOUND="$INPUT/data/notification.ogg"
+
 # Deploys the settings for every supported agent. Each agent gets its own folder
 # in this repository and its own preview_*/write_* pair below, since the target
 # directory, the file set and the merge strategy all differ per agent. The
@@ -94,7 +98,7 @@ preview_claude() {
         echo "NEW:       settings.json (target does not exist, will be created)"
     fi
 
-    preview_folder "$CLAUDE_INPUT/data" "$CLAUDE_OUTPUT/data" "data"
+    preview_file "$NOTIFICATION_SOUND" "$CLAUDE_OUTPUT/data/notification.ogg" "data/notification.ogg"
     preview_folder "$CLAUDE_INPUT/scripts" "$CLAUDE_OUTPUT/scripts" "scripts"
 }
 
@@ -115,8 +119,8 @@ write_claude() {
         cp "$CLAUDE_INPUT/settings.json" "$CLAUDE_OUTPUT/settings.json"
     fi
 
-    # Copy the folder contents
-    cp -R "$CLAUDE_INPUT/data/." "$CLAUDE_OUTPUT/data/"
+    # Copy the shared sound and the folder contents
+    cp "$NOTIFICATION_SOUND" "$CLAUDE_OUTPUT/data/"
     cp -R "$CLAUDE_INPUT/scripts/." "$CLAUDE_OUTPUT/scripts/"
 
     echo "Deployed Claude Code settings to $CLAUDE_OUTPUT"
@@ -225,7 +229,7 @@ preview_agy() {
         echo "NEW:       hooks.json (target does not exist, will be created)"
     fi
 
-    preview_folder "$AGY_INPUT/data" "$AGY_CONFIG_OUTPUT/data" "data"
+    preview_file "$NOTIFICATION_SOUND" "$AGY_CONFIG_OUTPUT/data/notification.ogg" "data/notification.ogg"
     preview_folder "$AGY_INPUT/scripts" "$AGY_CONFIG_OUTPUT/scripts" "scripts"
 }
 
@@ -248,7 +252,7 @@ write_agy() {
         cp "$AGY_INPUT/hooks.json" "$AGY_CONFIG_OUTPUT/hooks.json"
     fi
 
-    cp -R "$AGY_INPUT/data/." "$AGY_CONFIG_OUTPUT/data/"
+    cp "$NOTIFICATION_SOUND" "$AGY_CONFIG_OUTPUT/data/"
     cp -R "$AGY_INPUT/scripts/." "$AGY_CONFIG_OUTPUT/scripts/"
 
     echo "Deployed Antigravity settings to $AGY_CONFIG_OUTPUT and $AGY_CLI_OUTPUT"
