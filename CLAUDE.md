@@ -55,7 +55,7 @@ Substantive replies — work reported, findings, a review or plan — use this s
 
 Open with one line naming the purpose as you understood it: `Goal:`, `Problem:`, `Review:`, `Research:`, `Plan:`, `Blocked:`. Your reading of the task, not an echo of my words, so a misread shows up in line 1.
 
-Then up to 5 unnumbered bullets, ≤150 chars each: the outcome and its anchor — `AuthClient.kt:88 — retries 3× on 429`. Results, not a log of what you did. Past 5, summarize; never truncate silently. A table or code block may follow when the data is the deliverable; it doesn't count against the 5.
+A table or code block may follow when the data is the deliverable and showing it beats prose — your judgment.
 
 Then, only when there is something, a numbered list of what needs my attention. Each item ≤150 chars, self-contained, said once. Ordered 🚨 → ⚠️ → ✋ → 🔍; no type is padded to appear.
 
