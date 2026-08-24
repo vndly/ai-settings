@@ -1,0 +1,22 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+# Keep the model selectable per session, but use the same effort level as the
+# Claude Code settings when the selected model supports it.
+model_reasoning_effort = "xhigh"
+
+# Allow autonomous work inside the repository while keeping host-level actions
+# behind an explicit approval.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+# Use current results when Codex decides a task requires web research.
+web_search = "live"
+
+[agents]
+enabled = true
+
+[tui]
+alternate_screen = "always"
+notifications = true
+notification_condition = "unfocused"
+status_line = ["model-with-reasoning", "context-used", "five-hour-limit"]

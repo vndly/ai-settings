@@ -16,8 +16,9 @@ BRANCH="main"
 # --- Preconditions ----------------------------------------------------------
 
 # The clone needs git; deploy.sh additionally needs git (for its --no-index
-# diffs) and jq (for the Claude settings merge). Fail early with a clear message.
-for cmd in git jq; do
+# diffs), jq (for the Claude settings merge), and awk (for the Codex config
+# overlay). Fail early with a clear message.
+for cmd in git jq awk; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "Error: '$cmd' is required but not installed." >&2
         exit 1

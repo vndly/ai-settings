@@ -56,15 +56,20 @@ preview_folder() {
     done
 }
 
+# Temp files computed during preview and reused during the write phase so the
+# previewed and deployed content cannot drift. Cleaned up on every exit path.
+CLAUDE_MERGED_SETTINGS=""
+CODEX_MERGED_CONFIG=""
+
+cleanup() {
+    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG"
+}
+trap cleanup EXIT
+
 # --- Claude Code ------------------------------------------------------------
 
 CLAUDE_INPUT="$INPUT/claude"
 CLAUDE_OUTPUT="$HOME/.claude"
-
-# Temp file holding the merged settings.json, computed during the preview and
-# reused by the write phase so the two can never drift. Cleaned up on exit.
-CLAUDE_MERGED_SETTINGS=""
-trap 'rm -f "$CLAUDE_MERGED_SETTINGS"' EXIT
 
 preview_claude() {
     echo "Claude Code -> $CLAUDE_OUTPUT"
@@ -114,12 +119,62 @@ write_claude() {
     echo "Deployed Claude Code settings to $CLAUDE_OUTPUT"
 }
 
+# --- Codex ------------------------------------------------------------------
+
+CODEX_INPUT="$INPUT/codex"
+CODEX_OUTPUT="${CODEX_HOME:-$HOME/.codex}"
+
+preview_codex() {
+    echo
+    echo "Codex -> $CODEX_OUTPUT"
+    echo
+
+    # AGENTS.md: straight overwrite.
+    preview_file "$CODEX_INPUT/AGENTS.md" "$CODEX_OUTPUT/AGENTS.md" "AGENTS.md"
+
+    # config.toml: overlay the repository-owned keys while preserving unrelated
+    # user settings such as model selection, MCP servers, and trusted projects.
+    # The small AWK merger understands the simple scalar and one-line array keys
+    # owned by this repository and leaves every other line untouched.
+    if [ -f "$CODEX_OUTPUT/config.toml" ]; then
+        CODEX_MERGED_CONFIG="$(mktemp)"
+        awk -f "$CODEX_INPUT/scripts/merge-config.awk" \
+            "$CODEX_INPUT/config.toml" \
+            "$CODEX_OUTPUT/config.toml" > "$CODEX_MERGED_CONFIG"
+        preview_file "$CODEX_MERGED_CONFIG" "$CODEX_OUTPUT/config.toml" "config.toml (merged)"
+    else
+        echo "NEW:       config.toml (target does not exist, will be created)"
+    fi
+
+    # Use a repository-specific rules file so Codex's learned default.rules
+    # approvals survive deployment.
+    preview_folder "$CODEX_INPUT/rules" "$CODEX_OUTPUT/rules" "rules"
+}
+
+write_codex() {
+    mkdir -p "$CODEX_OUTPUT/rules"
+
+    cp "$CODEX_INPUT/AGENTS.md" "$CODEX_OUTPUT/AGENTS.md"
+
+    if [ -n "$CODEX_MERGED_CONFIG" ]; then
+        mv "$CODEX_MERGED_CONFIG" "$CODEX_OUTPUT/config.toml"
+        CODEX_MERGED_CONFIG=""
+    else
+        cp "$CODEX_INPUT/config.toml" "$CODEX_OUTPUT/config.toml"
+    fi
+
+    cp -R "$CODEX_INPUT/rules/." "$CODEX_OUTPUT/rules/"
+
+    echo "Deployed Codex settings to $CODEX_OUTPUT"
+}
+
 # --- Preview (read-only) ----------------------------------------------------
 
 echo "Previewing changes"
 echo
 
 preview_claude
+preview_codex
 
 # --- Confirm ----------------------------------------------------------------
 
@@ -137,3 +192,4 @@ esac
 # --- Write ------------------------------------------------------------------
 
 write_claude
+write_codex

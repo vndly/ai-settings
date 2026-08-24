@@ -1,0 +1,83 @@
+# Enforce the permission boundaries from AGENTS.md for host-level commands.
+
+prefix_rule(
+    pattern = ["git", "branch"],
+    decision = "prompt",
+    justification = "Creating or changing branches requires explicit user permission.",
+    match = [
+        "git branch feature/example",
+        "git branch -d feature/example",
+    ],
+    not_match = [
+        "git status",
+        "git diff",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "switch"],
+    decision = "prompt",
+    justification = "Switching or creating branches requires explicit user permission.",
+    match = [
+        "git switch main",
+        "git switch -c feature/example",
+    ],
+    not_match = [
+        "git status",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "checkout", ["-b", "-B"]],
+    decision = "prompt",
+    justification = "Creating a branch requires explicit user permission.",
+    match = [
+        "git checkout -b feature/example",
+        "git checkout -B feature/example",
+    ],
+    not_match = [
+        "git checkout -- path/to/file",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+    justification = "Creating commits requires explicit user permission.",
+    match = [
+        "git commit -m example",
+        "git commit --amend",
+    ],
+    not_match = [
+        "git status",
+        "git diff --cached",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Pushing commits requires explicit user permission.",
+    match = [
+        "git push",
+        "git push origin main",
+    ],
+    not_match = [
+        "git fetch",
+        "git remote -v",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "create"],
+    decision = "prompt",
+    justification = "Creating a GitHub repository requires explicit user permission.",
+    match = [
+        "gh repo create example",
+        "gh repo create example --private",
+    ],
+    not_match = [
+        "gh repo view example",
+        "gh repo list",
+    ],
+)
