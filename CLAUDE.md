@@ -55,7 +55,7 @@ Substantive replies — work reported, findings, a review or plan — use this s
 
 Open with one line naming the purpose as you understood it: `Goal:`, `Problem:`, `Review:`, `Research:`, `Plan:`, `Blocked:`. Your reading of the task, not an echo of my words, so a misread shows up in line 1.
 
-A table or code block may follow when the data is the deliverable and showing it beats prose — your judgment.
+A table or code block may follow, but only when the data is the deliverable and showing it beats prose — your judgment.
 
 Then, only when there is something, a numbered list of what needs my attention. Each item ≤150 chars, self-contained, said once. Ordered 🚨 → ⚠️ → ✋ → 🔍; no type is padded to appear.
 
