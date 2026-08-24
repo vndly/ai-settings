@@ -5,12 +5,12 @@ set -euo pipefail
 # One-line remote installer for these Claude Code settings. Intended to be run
 # straight from a pipe:
 #
-#   curl -fsSL https://raw.githubusercontent.com/vndly/claude-code-settings/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/vndly/ai-settings/main/install.sh | bash
 #
 # It clones the repository into a throwaway directory and hands off to deploy.sh,
 # which previews the changes and asks for confirmation before writing anything.
 
-REPO_URL="https://github.com/vndly/claude-code-settings.git"
+REPO_URL="https://github.com/vndly/ai-settings.git"
 BRANCH="main"
 
 # --- Preconditions ----------------------------------------------------------
