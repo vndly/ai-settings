@@ -10,9 +10,3 @@ curl -fsSL https://raw.githubusercontent.com/vndly/ai-settings/main/install.sh |
 
 1. Clone the repository
 2. Run the command `./deploy.sh`
-
-- This command copies the following items to the folder `~/.claude`:
-  - File `settings.json`
-  - File `CLAUDE.md`
-  - Folder `data`
-  - Folder `scripts`
