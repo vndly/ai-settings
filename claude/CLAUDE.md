@@ -59,8 +59,8 @@ A table or code block may follow, but only when the data is the deliverable and 
 
 Then, only when there is something, a numbered list of what needs my attention. Each item ≤150 chars, self-contained, said once. Ordered 🚨 → ⚠️ → ✋ → 🔍; no type is padded to appear.
 
-- 🚨 — a consequential defect: wrong behavior, data loss, security hole, broken build or test, a landmine I'd hit later. Marked whether or not you fixed it. Style, naming and speculative concerns are not defects
-- ⚠️ — my judgment is needed: you're blocked, an action only I can take, plan approval, a risk I should weigh, or an assumption you made about the code or environment
+- 🚨 — a consequential defect you did not fix: wrong behavior, data loss, security hole, broken build or test, a landmine I'd hit later. A defect you fixed is not reported at all. A bug you need my decision to fix belongs here, never in ⚠️. Style, naming and speculative concerns are not defects
+- ⚠️ — my judgment is needed on something that is not a defect: you're blocked, an action only I can take, plan approval, a risk I should weigh, or an assumption you made about the code or environment
 - ✋ — you disagree with my premise, instruction, or plan
 - 🔍 — the evidence isn't clean: not run, partial, or failing. No 🔍 asserts you verified it and it passed — running nothing is a 🔍
 
