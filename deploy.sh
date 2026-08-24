@@ -61,9 +61,11 @@ preview_folder() {
 CLAUDE_MERGED_SETTINGS=""
 CODEX_MERGED_CONFIG=""
 CODEX_MERGED_RULES=""
+AGY_MERGED_SETTINGS=""
+AGY_MERGED_HOOKS=""
 
 cleanup() {
-    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG" "$CODEX_MERGED_RULES"
+    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG" "$CODEX_MERGED_RULES" "$AGY_MERGED_SETTINGS" "$AGY_MERGED_HOOKS"
 }
 trap cleanup EXIT
 
@@ -190,6 +192,68 @@ write_codex() {
     echo "Deployed Codex settings to $CODEX_OUTPUT"
 }
 
+# --- Antigravity (agy) ------------------------------------------------------
+
+AGY_INPUT="$INPUT/agy"
+AGY_CLI_OUTPUT="$HOME/.gemini/antigravity-cli"
+AGY_CONFIG_OUTPUT="$HOME/.gemini/config"
+
+preview_agy() {
+    echo
+    echo "Antigravity -> $AGY_CONFIG_OUTPUT, $AGY_CLI_OUTPUT"
+    echo
+
+    # AGENTS.md: straight overwrite.
+    preview_file "$AGY_INPUT/AGENTS.md" "$AGY_CONFIG_OUTPUT/AGENTS.md" "AGENTS.md"
+
+    # settings.json: deep-merge into the existing file so locally-added keys
+    # (trustedWorkspaces, etc.) survive.
+    if [ -f "$AGY_CLI_OUTPUT/settings.json" ]; then
+        AGY_MERGED_SETTINGS="$(mktemp)"
+        jq -s '.[0] * .[1]' "$AGY_CLI_OUTPUT/settings.json" "$AGY_INPUT/settings.json" > "$AGY_MERGED_SETTINGS"
+        preview_file "$AGY_MERGED_SETTINGS" "$AGY_CLI_OUTPUT/settings.json" "antigravity-cli/settings.json (merged)"
+    else
+        echo "NEW:       antigravity-cli/settings.json (target does not exist, will be created)"
+    fi
+
+    # hooks.json: deep-merge into existing hooks if present.
+    if [ -f "$AGY_CONFIG_OUTPUT/hooks.json" ]; then
+        AGY_MERGED_HOOKS="$(mktemp)"
+        jq -s '.[0] * .[1]' "$AGY_CONFIG_OUTPUT/hooks.json" "$AGY_INPUT/hooks.json" > "$AGY_MERGED_HOOKS"
+        preview_file "$AGY_MERGED_HOOKS" "$AGY_CONFIG_OUTPUT/hooks.json" "hooks.json (merged)"
+    elif [ -f "$AGY_INPUT/hooks.json" ]; then
+        echo "NEW:       hooks.json (target does not exist, will be created)"
+    fi
+
+    preview_folder "$AGY_INPUT/data" "$AGY_CONFIG_OUTPUT/data" "data"
+    preview_folder "$AGY_INPUT/scripts" "$AGY_CONFIG_OUTPUT/scripts" "scripts"
+}
+
+write_agy() {
+    mkdir -p "$AGY_CONFIG_OUTPUT/data" "$AGY_CONFIG_OUTPUT/scripts" "$AGY_CLI_OUTPUT"
+
+    cp "$AGY_INPUT/AGENTS.md" "$AGY_CONFIG_OUTPUT/AGENTS.md"
+
+    if [ -n "$AGY_MERGED_SETTINGS" ]; then
+        mv "$AGY_MERGED_SETTINGS" "$AGY_CLI_OUTPUT/settings.json"
+        AGY_MERGED_SETTINGS=""
+    else
+        cp "$AGY_INPUT/settings.json" "$AGY_CLI_OUTPUT/settings.json"
+    fi
+
+    if [ -n "$AGY_MERGED_HOOKS" ]; then
+        mv "$AGY_MERGED_HOOKS" "$AGY_CONFIG_OUTPUT/hooks.json"
+        AGY_MERGED_HOOKS=""
+    elif [ -f "$AGY_INPUT/hooks.json" ]; then
+        cp "$AGY_INPUT/hooks.json" "$AGY_CONFIG_OUTPUT/hooks.json"
+    fi
+
+    cp -R "$AGY_INPUT/data/." "$AGY_CONFIG_OUTPUT/data/"
+    cp -R "$AGY_INPUT/scripts/." "$AGY_CONFIG_OUTPUT/scripts/"
+
+    echo "Deployed Antigravity settings to $AGY_CONFIG_OUTPUT and $AGY_CLI_OUTPUT"
+}
+
 # --- Preview (read-only) ----------------------------------------------------
 
 echo "Previewing changes"
@@ -197,6 +261,7 @@ echo
 
 preview_claude
 preview_codex
+preview_agy
 
 # --- Confirm ----------------------------------------------------------------
 
@@ -215,3 +280,4 @@ esac
 
 write_claude
 write_codex
+write_agy

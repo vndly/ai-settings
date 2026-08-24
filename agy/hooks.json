@@ -1,0 +1,10 @@
+{
+  "notifications": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "~/.gemini/config/scripts/notify.sh 'Antigravity: Ready' ~/.gemini/config/data/notification.ogg"
+      }
+    ]
+  }
+}
