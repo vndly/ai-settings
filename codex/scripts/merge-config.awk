@@ -49,7 +49,11 @@ function scan_line(line, i, ch, triple, delta, quote, escaped) {
 
         # Inside a multi-line string only its closing delimiter matters.
         if (ml_quote != "") {
-            if (triple == ml_quote) {
+            if (ml_quote == "\"\"\"" && escaped) {
+                escaped = 0
+            } else if (ml_quote == "\"\"\"" && ch == "\\") {
+                escaped = 1
+            } else if (triple == ml_quote && substr(line, i + 3, 1) != ch) {
                 ml_quote = ""
                 i += 2
             }
