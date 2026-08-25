@@ -19,4 +19,5 @@ enabled = true
 alternate_screen = "always"
 notifications = true
 notification_condition = "unfocused"
-status_line = ["model-with-reasoning", "context-used", "five-hour-limit"]
+status_line = ["model-with-reasoning", "context-used", "five-hour-limit", "weekly-limit"]
+status_line_use_colors = true
