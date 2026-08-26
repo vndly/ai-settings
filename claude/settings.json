@@ -81,7 +81,7 @@
       "Working"
     ]
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
   "voiceEnabled": true
