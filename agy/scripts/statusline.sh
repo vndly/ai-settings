@@ -24,33 +24,65 @@ progress_bar() {
 }
 
 INPUT=$(cat)
-MODEL=$(echo "$INPUT" | jq -r '.model.display_name' | sed 's/ (1M context)//')
-CONTEXT_SIZE=$(echo "$INPUT" | jq -r '.context_window.context_window_size // 0')
-USAGE=$(echo "$INPUT" | jq '.context_window.current_usage')
 
-WINDOW=$(echo "$INPUT" | jq -r '.rate_limits.five_hour.used_percentage // 0 | round')
-RESETS_AT=$(echo "$INPUT" | jq -r '.rate_limits.five_hour.resets_at // 0')
-NOW=$(date +%s)
-REMAINING=$((RESETS_AT - NOW))
-if [ "$REMAINING" -lt 0 ]; then
-    REMAINING=0
-fi
-HOURS=$((REMAINING / 3600))
-MINUTES=$(( (REMAINING % 3600) / 60 ))
-WINDOW_TIME=$(printf "(%02d:%02d)" "$HOURS" "$MINUTES")
+IFS=$'\t' read -r MODEL CONTEXT_PCT QUOTA_PCT RESETS_AT <<< "$(echo "$INPUT" | jq -r '
+. as $root
+| ($root.model.display_name // $root.model.id // "Gemini") as $model
+| (
+    if $root.context_window.used_percentage != null then
+      ($root.context_window.used_percentage | round)
+    elif (($root.context_window.context_window_size // 0) > 0) then
+      (
+        ($root.context_window.total_input_tokens // (
+          ($root.context_window.current_usage.input_tokens // 0) +
+          ($root.context_window.current_usage.cache_creation_input_tokens // 0) +
+          ($root.context_window.current_usage.cache_read_input_tokens // 0)
+        ) // 0) * 100 / $root.context_window.context_window_size
+      ) | round
+    else
+      0
+    end
+  ) as $context_pct
+| (
+    if $root.quota.used_percentage != null then
+      ($root.quota.used_percentage | round)
+    elif $root.quota.remaining_fraction != null then
+      (((1.0 - $root.quota.remaining_fraction) * 100) | round)
+    else
+      ""
+    end
+  ) as $quota_pct
+| (
+    if $root.quota.reset_time != null then
+      $root.quota.reset_time
+    elif $root.quota.resets_at != null then
+      $root.quota.resets_at
+    else
+      ""
+    end
+  ) as $resets_at
+| "\($model)\t\($context_pct)\t\($quota_pct)\t\($resets_at)"
+')"
 
-if [ "$USAGE" != "null" ] && [ "$CONTEXT_SIZE" -gt 0 ]; then
-    CURRENT_TOKENS=$(echo "$USAGE" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens')
-    PERCENT_USED=$((CURRENT_TOKENS * 100 / CONTEXT_SIZE))
-    CONTEXT_BAR=$(progress_bar "$PERCENT_USED")
-    CONTEXT_COLOR=$(get_color "$PERCENT_USED")
-    WINDOW_BAR=$(progress_bar "$WINDOW")
-    WINDOW_COLOR=$(get_color "$WINDOW")
-    echo "${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}${PERCENT_USED}%${N}${W} Window:${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N} ${W}${WINDOW_TIME}${N}"
-else
-    CONTEXT_BAR=$(progress_bar 0)
-    CONTEXT_COLOR=$(get_color 0)
-    WINDOW_BAR=$(progress_bar "$WINDOW")
-    WINDOW_COLOR=$(get_color "$WINDOW")
-    echo "${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}0%${N}${W} Window:${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N} ${W}${WINDOW_TIME}${N}"
+CONTEXT_PCT=${CONTEXT_PCT:-0}
+CONTEXT_BAR=$(progress_bar "$CONTEXT_PCT")
+CONTEXT_COLOR=$(get_color "$CONTEXT_PCT")
+
+OUTPUT="${W}[$MODEL] Context:${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}${CONTEXT_PCT}%${N}"
+
+if [ -n "$QUOTA_PCT" ]; then
+    QUOTA_BAR=$(progress_bar "$QUOTA_PCT")
+    QUOTA_COLOR=$(get_color "$QUOTA_PCT")
+    QUOTA_TIME=""
+    if [ -n "$RESETS_AT" ] && [ "$RESETS_AT" -gt 0 ] 2>/dev/null; then
+        NOW=$(date +%s)
+        REMAINING=$((RESETS_AT - NOW))
+        ((REMAINING < 0)) && REMAINING=0
+        HOURS=$((REMAINING / 3600))
+        MINUTES=$(((REMAINING % 3600) / 60))
+        QUOTA_TIME=" $(printf "(%02d:%02d)" "$HOURS" "$MINUTES")"
+    fi
+    OUTPUT="${OUTPUT}${W} Quota:${N} ${QUOTA_BAR} ${QUOTA_COLOR}${QUOTA_PCT}%${N}${W}${QUOTA_TIME}${N}"
 fi
+
+echo "$OUTPUT"
