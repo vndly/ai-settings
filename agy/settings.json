@@ -12,6 +12,7 @@
   "toolExecutionPolicy": "always-proceed",
   "permissions": {
     "allow": [
+      "read_url(docs.anthropic.com)",
       "read_url(antigravity.google)",
       "command(python3)",
       "command(git)",

@@ -60,6 +60,26 @@ preview_folder() {
     done
 }
 
+# merge_settings <tgt> <src>
+# Deep-merges JSON settings source over target so locally-added keys survive.
+# Arrays under permissions.allow are merged as a deduplicated union.
+merge_settings() {
+    local tgt="$1" src="$2"
+
+    jq -s '
+        .[0] as $a
+        | .[1] as $b
+        | ($a * $b) as $merged
+        | ($a | try .permissions.allow catch null) as $pa
+        | ($b | try .permissions.allow catch null) as $pb
+        | if ($pa != null or $pb != null) then
+            $merged | .permissions.allow = ((($pa // []) + ($pb // [])) | unique)
+          else
+            $merged
+          end
+    ' "$tgt" "$src"
+}
+
 # Temp files computed during preview and reused during the write phase so the
 # previewed and deployed content cannot drift. Cleaned up on every exit path.
 CLAUDE_MERGED_SETTINGS=""
@@ -86,13 +106,12 @@ preview_claude() {
     preview_file "$CLAUDE_INPUT/CLAUDE.md" "$CLAUDE_OUTPUT/CLAUDE.md" "CLAUDE.md"
 
     # settings.json: deep-merge into the existing file so locally-added keys
-    # (extra enabledPlugins, marketplaces, etc.) survive. jq's "*" recursively
-    # merges objects with the right operand winning, so the repo's values take
-    # precedence. Preview the *merged result* (not the raw source) against the
-    # current target, since that is what the write phase will actually produce.
+    # (extra enabledPlugins, marketplaces, etc.) survive and permissions.allow
+    # lists are merged. Preview the *merged result* (not the raw source) against
+    # the current target, since that is what the write phase will actually produce.
     if [ -f "$CLAUDE_OUTPUT/settings.json" ]; then
         CLAUDE_MERGED_SETTINGS="$(mktemp)"
-        jq -s '.[0] * .[1]' "$CLAUDE_OUTPUT/settings.json" "$CLAUDE_INPUT/settings.json" > "$CLAUDE_MERGED_SETTINGS"
+        merge_settings "$CLAUDE_OUTPUT/settings.json" "$CLAUDE_INPUT/settings.json" > "$CLAUDE_MERGED_SETTINGS"
         preview_file "$CLAUDE_MERGED_SETTINGS" "$CLAUDE_OUTPUT/settings.json" "settings.json (merged)"
     else
         echo "NEW:       settings.json (target does not exist, will be created)"
@@ -211,10 +230,10 @@ preview_agy() {
     preview_file "$AGY_INPUT/AGENTS.md" "$AGY_CONFIG_OUTPUT/AGENTS.md" "AGENTS.md"
 
     # settings.json: deep-merge into the existing file so locally-added keys
-    # (trustedWorkspaces, etc.) survive.
+    # (trustedWorkspaces, etc.) survive and permissions.allow lists are merged.
     if [ -f "$AGY_CLI_OUTPUT/settings.json" ]; then
         AGY_MERGED_SETTINGS="$(mktemp)"
-        jq -s '.[0] * .[1]' "$AGY_CLI_OUTPUT/settings.json" "$AGY_INPUT/settings.json" > "$AGY_MERGED_SETTINGS"
+        merge_settings "$AGY_CLI_OUTPUT/settings.json" "$AGY_INPUT/settings.json" > "$AGY_MERGED_SETTINGS"
         preview_file "$AGY_MERGED_SETTINGS" "$AGY_CLI_OUTPUT/settings.json" "antigravity-cli/settings.json (merged)"
     else
         echo "NEW:       antigravity-cli/settings.json (target does not exist, will be created)"
