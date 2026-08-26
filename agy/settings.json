@@ -1,5 +1,8 @@
 {
   "allowNonWorkspaceAccess": true,
   "colorScheme": "dark",
-  "model": "Gemini 3.7 Flash (High)"
+  "internetAccessPolicy": "allow",
+  "model": "Gemini 3.7 Flash (High)",
+  "notifications": true,
+  "toolExecutionPolicy": "always-proceed"
 }
