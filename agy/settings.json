@@ -4,5 +4,31 @@
   "internetAccessPolicy": "allow",
   "model": "Gemini 3.7 Flash (High)",
   "notifications": true,
-  "toolExecutionPolicy": "always-proceed"
+  "statusLine": {
+    "enabled": true,
+    "command": "~/.gemini/config/scripts/statusline.sh",
+    "stack_with_default": false
+  },
+  "toolExecutionPolicy": "always-proceed",
+  "permissions": {
+    "allow": [
+      "read_url(antigravity.google)",
+      "command(python3)",
+      "command(git)",
+      "command(rm)",
+      "command(chmod)",
+      "command(agy)",
+      "command(which)",
+      "command(strings)",
+      "command(grep)",
+      "command(sort)",
+      "command(head)",
+      "command(nm)",
+      "command(jq)",
+      "command(printf)",
+      "command(ls)",
+      "command(bash)",
+      "command(echo)"
+    ]
+  }
 }
