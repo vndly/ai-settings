@@ -230,10 +230,10 @@ preview_agy() {
     preview_file "$AGY_INPUT/AGENTS.md" "$AGY_CONFIG_OUTPUT/AGENTS.md" "AGENTS.md"
 
     # settings.json: deep-merge into the existing file so locally-added keys
-    # (trustedWorkspaces, etc.) survive and permissions.allow lists are merged.
+    # (trustedWorkspaces, etc.) survive.
     if [ -f "$AGY_CLI_OUTPUT/settings.json" ]; then
         AGY_MERGED_SETTINGS="$(mktemp)"
-        merge_settings "$AGY_CLI_OUTPUT/settings.json" "$AGY_INPUT/settings.json" > "$AGY_MERGED_SETTINGS"
+        jq -s '.[0] * .[1]' "$AGY_CLI_OUTPUT/settings.json" "$AGY_INPUT/settings.json" > "$AGY_MERGED_SETTINGS"
         preview_file "$AGY_MERGED_SETTINGS" "$AGY_CLI_OUTPUT/settings.json" "antigravity-cli/settings.json (merged)"
     else
         echo "NEW:       antigravity-cli/settings.json (target does not exist, will be created)"
