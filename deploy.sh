@@ -4,7 +4,7 @@ set -euo pipefail
 
 INPUT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Claude Code and Antigravity play the same notification sound, so it lives once
+# Claude Code, Codex, and Antigravity play the same notification sound, so it lives once
 # in this repository's data folder and is copied into each of their data folders.
 NOTIFICATION_SOUND="$INPUT/data/notification.ogg"
 
@@ -189,10 +189,13 @@ preview_codex() {
     if [ -f "$CODEX_OUTPUT/rules/ai-settings.rules" ]; then
         echo "REMOVE:    rules/ai-settings.rules (replaced by rules/default.rules)"
     fi
+
+    preview_file "$NOTIFICATION_SOUND" "$CODEX_OUTPUT/data/notification.ogg" "data/notification.ogg"
+    preview_folder "$CODEX_INPUT/scripts" "$CODEX_OUTPUT/scripts" "scripts"
 }
 
 write_codex() {
-    mkdir -p "$CODEX_OUTPUT/rules"
+    mkdir -p "$CODEX_OUTPUT/rules" "$CODEX_OUTPUT/data" "$CODEX_OUTPUT/scripts"
 
     cp "$CODEX_INPUT/AGENTS.md" "$CODEX_OUTPUT/AGENTS.md"
 
@@ -211,6 +214,9 @@ write_codex() {
     fi
 
     rm -f -- "$CODEX_OUTPUT/rules/ai-settings.rules"
+
+    cp "$NOTIFICATION_SOUND" "$CODEX_OUTPUT/data/"
+    cp -R "$CODEX_INPUT/scripts/." "$CODEX_OUTPUT/scripts/"
 
     echo "Deployed Codex settings to $CODEX_OUTPUT"
 }

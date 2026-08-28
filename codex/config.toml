@@ -12,6 +12,8 @@ sandbox_mode = "workspace-write"
 # Use current results when Codex decides a task requires web research.
 web_search = "live"
 
+notify = ["bash", "-c", "~/.codex/scripts/notify.sh 'Codex: Ready' ~/.codex/data/notification.ogg"]
+
 [agents]
 enabled = true
 
