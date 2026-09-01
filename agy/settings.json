@@ -6,8 +6,7 @@
   "notifications": true,
   "statusLine": {
     "enabled": true,
-    "command": "~/.gemini/config/scripts/statusline.sh",
-    "stack_with_default": false
+    "command": "~/.gemini/config/scripts/statusline.sh"
   },
   "toolExecutionPolicy": "always-proceed",
   "permissions": {
@@ -16,10 +15,7 @@
       "execute_url(*)",
       "command(*)",
       "read_file(*)",
-      "edit_file(*)",
       "write_file(*)",
-      "list_dir(*)",
-      "directory_content(*)",
       "mcp(*)"
     ]
   }
