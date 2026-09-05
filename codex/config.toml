@@ -1,8 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-# Keep the model selectable per session, but use the same effort level as the
-# Claude Code settings when the selected model supports it.
-model_reasoning_effort = "xhigh"
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
 
 # Allow autonomous work inside the repository while keeping host-level actions
 # behind an explicit approval.
