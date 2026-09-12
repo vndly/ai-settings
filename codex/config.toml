@@ -17,6 +17,9 @@ notify = ["bash", "-c", "~/.codex/scripts/notify.sh 'Codex: Ready' ~/.codex/data
 enabled = true
 
 [tui]
+whimsy = false
+
+[tui]
 alternate_screen = "always"
 notifications = true
 notification_condition = "unfocused"
