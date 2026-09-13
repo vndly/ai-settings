@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/notify.sh 'Claude: Permission request' ~/.claude/data/notification.ogg"
+            "command": "~/.claude/scripts/notify.sh 'Claude: Input needed' ~/.claude/data/notification.ogg"
           }
         ]
       }
