@@ -81,7 +81,7 @@
       "Working"
     ]
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "tui": "fullscreen",
   "remoteControlAtStartup": false,
   "skipWorkflowUsageWarning": true,
