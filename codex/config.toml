@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-model = "gpt-6-astra"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
 
 # Allow autonomous work inside the repository while keeping host-level actions
