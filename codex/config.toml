@@ -22,6 +22,6 @@ whimsy = false
 [tui]
 alternate_screen = "always"
 notifications = true
-notification_condition = "unfocused"
+notification_condition = "always"
 status_line = ["model-with-reasoning", "context-used", "five-hour-limit", "weekly-limit"]
 status_line_use_colors = true
