@@ -2,28 +2,27 @@
   "permissions": {
     "allow": [
       "Bash",
-      "BashOutput",
       "Read",
       "Edit",
-      "MultiEdit",
       "Write",
       "Glob",
       "Grep",
-      "LS",
       "WebFetch",
       "WebSearch",
       "Skill",
-      "Task",
       "Agent",
       "LSP",
       "mcp__ide__getDiagnostics"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ],
     "defaultMode": "auto"
   },
   "hooks": {
     "PermissionRequest": [
       {
-        "matcher": ".*",
         "hooks": [
           {
             "type": "command",
@@ -34,7 +33,6 @@
     ],
     "Stop": [
       {
-        "matcher": ".*",
         "hooks": [
           {
             "type": "command",
