@@ -25,6 +25,8 @@ progress_bar() {
 
 INPUT=$(cat)
 MODEL=$(echo "$INPUT" | jq -r '.model.display_name' | sed 's/ (1M context)//')
+EFFORT=$(echo "$INPUT" | jq -r '.effort.level // empty')
+[ -n "$EFFORT" ] && MODEL="$MODEL · $EFFORT"
 CONTEXT_SIZE=$(echo "$INPUT" | jq -r '.context_window.context_window_size // 0')
 USAGE=$(echo "$INPUT" | jq '.context_window.current_usage')
 
