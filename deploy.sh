@@ -65,21 +65,46 @@ preview_folder() {
 
 # merge_settings <tgt> <src>
 # Deep-merges JSON settings source over target so locally-added keys survive.
-# Arrays under permissions.allow are merged as a deduplicated union.
+# jq's `*` recurses into objects but lets the source win outright for arrays and
+# scalars, so this repository owns every key it declares -- including the
+# permissions.allow/deny/ask lists, where an entry removed here has to disappear
+# from the target too. Keys the source does not declare are left untouched;
+# settings_local_only lists them during the preview.
 merge_settings() {
     local tgt="$1" src="$2"
 
-    jq -s '
-        .[0] as $a
-        | .[1] as $b
-        | ($a * $b) as $merged
-        | ($a | try .permissions.allow catch null) as $pa
-        | ($b | try .permissions.allow catch null) as $pb
-        | if ($pa != null or $pb != null) then
-            $merged | .permissions.allow = ((($pa // []) + ($pb // [])) | unique)
-          else
-            $merged
-          end
+    jq -s '.[0] * .[1]' "$tgt" "$src"
+}
+
+# settings_local_only <tgt> <src>
+# Print the key paths merge_settings will carry over from the target untouched,
+# one per line, because this repository says nothing about them. This walks the
+# two files exactly the way jq's `*` merges them -- recursing only while both
+# sides hold an object, and stopping at the first key the source does not have,
+# since the whole subtree below it is the target's. Anything the source does
+# declare is left out: `*` gives it to the source outright, whatever its shape.
+settings_local_only() {
+    local tgt="$1" src="$2"
+
+    jq -s -r '
+        def local_only($src):
+            if (type == "object" and ($src | type) == "object") then
+                [ to_entries[]
+                  | .key as $key
+                  | if ($src | has($key)) then
+                        .value | local_only($src[$key])[] | [$key] + .
+                    else
+                        [$key]
+                    end
+                ]
+            else
+                []
+            end;
+
+        .[1] as $src
+        | .[0]
+        | local_only($src)[]
+        | join(".")
     ' "$tgt" "$src"
 }
 
@@ -112,13 +137,23 @@ preview_claude() {
     preview_file "$CLAUDE_INPUT/CLAUDE.md" "$CLAUDE_OUTPUT/CLAUDE.md" "CLAUDE.md"
 
     # settings.json: deep-merge into the existing file so locally-added keys
-    # (extra enabledPlugins, marketplaces, etc.) survive and permissions.allow
-    # lists are merged. Preview the *merged result* (not the raw source) against
-    # the current target, since that is what the write phase will actually produce.
+    # (extra enabledPlugins, marketplaces, etc.) survive, while every key this
+    # repository declares -- the permission lists included -- is taken from here.
+    # Preview the *merged result* (not the raw source) against the current
+    # target, since that is what the write phase will actually produce, then name
+    # the local-only keys the merge carries over, so the parts of the deployed
+    # file this repository does not control are never confirmed unseen.
     if [ -f "$CLAUDE_OUTPUT/settings.json" ]; then
         CLAUDE_MERGED_SETTINGS="$(mktemp)"
         merge_settings "$CLAUDE_OUTPUT/settings.json" "$CLAUDE_INPUT/settings.json" > "$CLAUDE_MERGED_SETTINGS"
         preview_file "$CLAUDE_MERGED_SETTINGS" "$CLAUDE_OUTPUT/settings.json" "settings.json (merged)"
+
+        local local_only
+        local_only="$(settings_local_only "$CLAUDE_OUTPUT/settings.json" "$CLAUDE_INPUT/settings.json")"
+        if [ -n "$local_only" ]; then
+            echo "local-only: settings.json keys kept from the deployed file"
+            echo "$local_only" | sed 's/^/            /'
+        fi
     else
         HAS_CHANGES=1
         echo "NEW:       settings.json (target does not exist, will be created)"
