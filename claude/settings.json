@@ -17,12 +17,15 @@
     "ask": [
       "Bash(git push:*)",
       "Bash(git commit:*)",
+      "Bash(git branch:*)",
       "Bash(git checkout -b:*)",
       "Bash(git checkout -B:*)",
       "Bash(git switch -c:*)",
       "Bash(git switch -C:*)",
       "Bash(git switch --create:*)",
-      "Bash(gh repo create:*)"
+      "Bash(git worktree add:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh repo fork:*)"
     ],
     "defaultMode": "auto"
   },
