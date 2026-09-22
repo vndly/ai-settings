@@ -23,6 +23,7 @@ preview_file() {
     local src="$1" tgt="$2" label="$3"
 
     if [ ! -e "$tgt" ]; then
+        HAS_CHANGES=1
         echo "NEW:       $label (target does not exist, will be created)"
         return
     fi
@@ -39,12 +40,14 @@ preview_file() {
     fi
 
     if [ "${numstat%%$'\t'*}" = "-" ]; then
+        HAS_CHANGES=1
         echo "binary:    $label (skipped, will be copied as-is)"
         return
     fi
 
+    HAS_CHANGES=1
     echo "changed:   $label"
-    git diff --no-index --color=auto -- "$tgt" "$src" || true
+    git diff --no-index --color="$PREVIEW_COLOR" -- "$tgt" "$src" || true
 }
 
 # preview_folder <src_dir> <tgt_dir> <label>
@@ -87,9 +90,12 @@ CODEX_MERGED_CONFIG=""
 CODEX_MERGED_RULES=""
 AGY_MERGED_SETTINGS=""
 AGY_MERGED_HOOKS=""
+PREVIEW_OUTPUT=""
+PREVIEW_COLOR=never
+HAS_CHANGES=0
 
 cleanup() {
-    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG" "$CODEX_MERGED_RULES" "$AGY_MERGED_SETTINGS" "$AGY_MERGED_HOOKS"
+    rm -f -- "$CLAUDE_MERGED_SETTINGS" "$CODEX_MERGED_CONFIG" "$CODEX_MERGED_RULES" "$AGY_MERGED_SETTINGS" "$AGY_MERGED_HOOKS" "$PREVIEW_OUTPUT"
 }
 trap cleanup EXIT
 
@@ -114,6 +120,7 @@ preview_claude() {
         merge_settings "$CLAUDE_OUTPUT/settings.json" "$CLAUDE_INPUT/settings.json" > "$CLAUDE_MERGED_SETTINGS"
         preview_file "$CLAUDE_MERGED_SETTINGS" "$CLAUDE_OUTPUT/settings.json" "settings.json (merged)"
     else
+        HAS_CHANGES=1
         echo "NEW:       settings.json (target does not exist, will be created)"
     fi
 
@@ -171,6 +178,7 @@ preview_codex() {
             "$CODEX_OUTPUT/config.toml" > "$CODEX_MERGED_CONFIG"
         preview_file "$CODEX_MERGED_CONFIG" "$CODEX_OUTPUT/config.toml" "config.toml (merged)"
     else
+        HAS_CHANGES=1
         echo "NEW:       config.toml (target does not exist, will be created)"
     fi
 
@@ -183,10 +191,12 @@ preview_codex() {
             "$CODEX_RULES_SOURCE" > "$CODEX_MERGED_RULES"
         preview_file "$CODEX_MERGED_RULES" "$CODEX_RULES_TARGET" "rules/default.rules (merged)"
     else
+        HAS_CHANGES=1
         echo "NEW:       rules/default.rules (target does not exist, will be created)"
     fi
 
     if [ -f "$CODEX_OUTPUT/rules/ai-settings.rules" ]; then
+        HAS_CHANGES=1
         echo "REMOVE:    rules/ai-settings.rules (replaced by rules/default.rules)"
     fi
 
@@ -242,6 +252,7 @@ preview_agy() {
         jq -s '.[0] * .[1]' "$AGY_CLI_OUTPUT/settings.json" "$AGY_INPUT/settings.json" > "$AGY_MERGED_SETTINGS"
         preview_file "$AGY_MERGED_SETTINGS" "$AGY_CLI_OUTPUT/settings.json" "antigravity-cli/settings.json (merged)"
     else
+        HAS_CHANGES=1
         echo "NEW:       antigravity-cli/settings.json (target does not exist, will be created)"
     fi
 
@@ -251,6 +262,7 @@ preview_agy() {
         jq -s '.[0] * .[1]' "$AGY_CONFIG_OUTPUT/hooks.json" "$AGY_INPUT/hooks.json" > "$AGY_MERGED_HOOKS"
         preview_file "$AGY_MERGED_HOOKS" "$AGY_CONFIG_OUTPUT/hooks.json" "hooks.json (merged)"
     elif [ -f "$AGY_INPUT/hooks.json" ]; then
+        HAS_CHANGES=1
         echo "NEW:       hooks.json (target does not exist, will be created)"
     fi
 
@@ -285,12 +297,26 @@ write_agy() {
 
 # --- Preview (read-only) ----------------------------------------------------
 
-echo "Previewing changes"
-echo
+if [ -t 1 ]; then
+    PREVIEW_COLOR=always
+fi
 
-preview_claude
-preview_codex
-preview_agy
+PREVIEW_OUTPUT="$(mktemp)"
+{
+    echo "Previewing changes"
+    echo
+
+    preview_claude
+    preview_codex
+    preview_agy
+} > "$PREVIEW_OUTPUT"
+
+if [ "$HAS_CHANGES" -eq 0 ]; then
+    echo "Already up to date."
+    exit 0
+fi
+
+cat "$PREVIEW_OUTPUT"
 
 # --- Confirm ----------------------------------------------------------------
 
