@@ -17,7 +17,6 @@
     "ask": [
       "Bash(git push:*)",
       "Bash(git commit:*)",
-      "Bash(git branch:*)",
       "Bash(git checkout -b:*)",
       "Bash(git checkout -B:*)",
       "Bash(git switch -c:*)",
