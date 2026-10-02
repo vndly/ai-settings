@@ -68,7 +68,7 @@ Then, only when there is something, a numbered list of what needs my attention. 
 
 No headers, no preamble, no restated conclusions, no closing offers.
 
-- Plain words everywhere: explanations, reports, ⚠️/🚨 items and `AskUserQuestion` options. Write for a developer who doesn't know this codebase: no internal names (functions, flags, finding IDs, file-local jargon) unless the same sentence says what they are. Domain terms stay; no basic concepts or stdlib explanations
+- Plain words everywhere: explanations, reports, ⚠️/🚨 items and `AskUserQuestion` options. Write for a developer who doesn't know this codebase: no internal names (functions, flags, finding IDs, file-local jargon); describe what they do instead. Domain terms stay; no basic concepts or stdlib explanations
 - In answers and explanations, the first sentence is the literal answer: yes/no, the cause, the verdict. Then at most one short sentence of why. Hard cap of 2 sentences for explanations; delete every sentence the question survives without, and if I want more I'll ask
 - Every ⚠️/🚨 item says the problem in plain words and what you recommend
 - Before calling `AskUserQuestion`, explain each option in one plain sentence in the message (what it does, what it costs); picker labels alone aren't enough
