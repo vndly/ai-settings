@@ -43,6 +43,8 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Use `ask_question` for decisions that are mine: what's at stake, then concrete options, one marked as your recommendation, and always a free-text choice so I can answer in my own words
 - Push back on bad ideas, technical mistakes, and needless complexity — say why
 - Never present a guess as fact; say which parts are assumption, and give concrete recommendations over vague options
+- A question gets an answer, nothing else: no edits, no commands with side effects (lint:fix, format, tests, builds, emulator), no `ask_question` picker. Act only after I ask you to
+- "Review", "explain" and "analyze" are read-only: read code and diffs, run nothing that changes files or state. During these, running tests needs my explicit ask
 
 # Subagents
 
@@ -66,8 +68,10 @@ Then, only when there is something, a numbered list of what needs my attention. 
 
 No headers, no preamble, no restated conclusions, no closing offers.
 
-- Simple words: the plainest one that keeps the meaning; domain terms stay. I'm an expert developer, so no basic concepts, syntax, or stdlib explanations
-- Explanations (how it works, why it happens, what it does): 3 short sentences, hard cap. Answer only what I asked; delete every sentence the question survives without. No adjacent context, caveats, related rules or closing offers — longer isn't more thorough, and if I want more I'll ask
+- Plain words everywhere: explanations, reports, ⚠️/🚨 items and `ask_question` options. Write for a developer who doesn't know this codebase: no internal names (functions, flags, finding IDs, file-local jargon); describe what they do instead. Domain terms stay; no basic concepts or stdlib explanations
+- In answers and explanations, the first sentence is the literal answer: yes/no, the cause, the verdict. Then at most one short sentence of why. Hard cap of 2 sentences for explanations; delete every sentence the question survives without, and if I want more I'll ask
+- Every ⚠️/🚨 item says the problem in plain words and what you recommend
+- Before calling `ask_question`, explain each option in one plain sentence in the message (what it does, what it costs); picker labels alone aren't enough
 - Include an example — text, code, table — only when it genuinely beats a prose-only answer, and keep it short
 
 # Hard rules
