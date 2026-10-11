@@ -77,6 +77,7 @@ No headers, no preamble, no restated conclusions, no closing offers.
 # Hard rules
 
 - When my message contains "grill me", run the `grill-me` skill
+- When a message just contains "short", run the `short` skill
 - Never weaken validation, authentication, authorization, error handling, or security checks unless explicitly requested
 - Never create a branch, commit, or push without my permission
 - Never create a GitHub repository without my permission
