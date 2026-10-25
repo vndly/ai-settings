@@ -24,9 +24,9 @@ progress_bar() {
 }
 
 INPUT=$(cat)
-MODEL=$(echo "$INPUT" | jq -r '.model.display_name' | sed 's/ (1M context)//')
-EFFORT=$(echo "$INPUT" | jq -r '.effort.level // empty')
-[ -n "$EFFORT" ] && MODEL="$MODEL · $EFFORT"
+# MODEL=$(echo "$INPUT" | jq -r '.model.display_name' | sed 's/ (1M context)//')
+# EFFORT=$(echo "$INPUT" | jq -r '.effort.level // empty')
+# [ -n "$EFFORT" ] && MODEL="$MODEL · $EFFORT"
 CONTEXT_SIZE=$(echo "$INPUT" | jq -r '.context_window.context_window_size // 0')
 USAGE=$(echo "$INPUT" | jq '.context_window.current_usage')
 
@@ -51,7 +51,8 @@ if [ "$USAGE" != "null" ] && [ "$CONTEXT_SIZE" -gt 0 ]; then
     WINDOW_COLOR=$(get_color "$WINDOW")
     WEEK_BAR=$(progress_bar "$WEEK")
     WEEK_COLOR=$(get_color "$WEEK")
-    echo "${W}[$MODEL]${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}${PERCENT_USED}%${N}${W} |${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N}${W} |${N} ${WEEK_BAR} ${WEEK_COLOR}${WEEK}%${N} ${W}${WINDOW_TIME}${N}"
+    # echo "${W}[$MODEL]${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}${PERCENT_USED}%${N}${W} |${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N}${W} |${N} ${WEEK_BAR} ${WEEK_COLOR}${WEEK}%${N} ${W}${WINDOW_TIME}${N}"
+    echo "${CONTEXT_BAR} ${CONTEXT_COLOR}${PERCENT_USED}%${N}${W} |${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N}${W} |${N} ${WEEK_BAR} ${WEEK_COLOR}${WEEK}%${N} ${W}${WINDOW_TIME}${N}"
 else
     CONTEXT_BAR=$(progress_bar 0)
     CONTEXT_COLOR=$(get_color 0)
@@ -59,5 +60,6 @@ else
     WINDOW_COLOR=$(get_color "$WINDOW")
     WEEK_BAR=$(progress_bar "$WEEK")
     WEEK_COLOR=$(get_color "$WEEK")
-    echo "${W}[$MODEL]${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}0%${N}${W} |${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N}${W} |${N} ${WEEK_BAR} ${WEEK_COLOR}${WEEK}%${N} ${W}${WINDOW_TIME}${N}"
+    # echo "${W}[$MODEL]${N} ${CONTEXT_BAR} ${CONTEXT_COLOR}0%${N}${W} |${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N}${W} |${N} ${WEEK_BAR} ${WEEK_COLOR}${WEEK}%${N} ${W}${WINDOW_TIME}${N}"
+    echo "${CONTEXT_BAR} ${CONTEXT_COLOR}0%${N}${W} |${N} ${WINDOW_BAR} ${WINDOW_COLOR}${WINDOW}%${N}${W} |${N} ${WEEK_BAR} ${WEEK_COLOR}${WEEK}%${N} ${W}${WINDOW_TIME}${N}"
 fi
