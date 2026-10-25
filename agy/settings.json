@@ -2,7 +2,7 @@
   "allowNonWorkspaceAccess": true,
   "colorScheme": "dark",
   "internetAccessPolicy": "allow",
-  "model": "Gemini 4 Argon (High)",
+  "model": "Gemini 3.8 Flash (High)",
   "notifications": true,
   "statusLine": {
     "enabled": true,
