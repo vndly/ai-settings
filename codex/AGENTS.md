@@ -73,6 +73,7 @@ No headers, no preamble, no restated conclusions, no closing offers.
 - Every ⚠️/🚨 item says the problem in plain words and what you recommend
 - Before using the structured user-input tool, explain each option in one plain sentence in the message (what it does, what it costs); picker labels alone aren't enough
 - Include an example — text, code, table — only when it genuinely beats a prose-only answer, and keep it short
+- Number every table's rows in a leading `#` column, starting at 1
 
 # Hard rules
 
