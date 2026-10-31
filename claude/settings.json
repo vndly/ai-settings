@@ -89,7 +89,7 @@
   },
   "effortLevel": "high",
   "tui": "fullscreen",
-  "remoteControlAtStartup": false,
+  "remoteControlAtStartup": true,
   "skipWorkflowUsageWarning": true,
   "voiceEnabled": true
 }
