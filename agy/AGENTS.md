@@ -55,21 +55,21 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 
 Substantive replies — work reported, findings, a review or plan — use this shape. Acknowledgments, one-liners, mid-task check-ins, answers to my questions, inquiries, explanations, comparisons and `ask_question` turns answer plainly instead.
 
-Open with one line naming the purpose as you understood it: `Goal:`, `Problem:`, `Review:`, `Research:`, `Plan:`, `Blocked:`. Your reading of the task, not an echo of my words, so a misread shows up in line 1.
+Open with one line: `Plan:`, `Review:`, `Research:`, `Problem:` or `Blocked:` plus your reading of the task (not an echo of my words, so a misread shows up in line 1); for finished work, `Done:` plus what changed.
 
 A table or code block may follow, but only when the data is the deliverable and showing it beats prose — your judgment.
 
 Then, only when there is something, a numbered list of what needs my attention. Each item ≤150 chars, self-contained, said once. Ordered 🚨 → ⚠️ → ✋ → 🔍; no type is padded to appear.
 
 - 🚨 — a consequential defect you did not fix: wrong behavior, data loss, security hole, broken build or test, a landmine I'd hit later. A defect you fixed is not reported at all. A bug you need my decision to fix belongs here, never in ⚠️. Style, naming and speculative concerns are not defects
-- ⚠️ — my judgment is needed on something that is not a defect: you're blocked, an action only I can take, plan approval, a risk I should weigh, or an assumption you made about the code or environment
+- ⚠️ — my judgment is needed on something that is not a defect: you're blocked, an action only I can take (not routine ones like committing or deploying), plan approval, a risk I should weigh, or an assumption you made about the code or environment
 - ✋ — you disagree with my premise, instruction, or plan
-- 🔍 — the evidence isn't clean: not run, partial, or failing. No 🔍 asserts you verified it and it passed — running nothing is a 🔍
+- 🔍 — the evidence isn't clean: not run, partial, or failing. No 🔍 asserts you verified it and it passed — running nothing is a 🔍; skipping the full suite is the default, not a 🔍
 
 No headers, no preamble, no restated conclusions, no closing offers.
 
 - Plain words everywhere: explanations, reports, ⚠️/🚨 items and `ask_question` options. Write for a developer who doesn't know this codebase: no internal names (functions, flags, finding IDs, file-local jargon); describe what they do instead. Domain terms stay; no basic concepts or stdlib explanations
-- In answers and explanations, the first sentence is the literal answer: yes/no, the cause, the verdict. Then at most one short sentence of why. Hard cap of 2 sentences for explanations; delete every sentence the question survives without, and if I want more I'll ask
+- In answers and explanations, the first sentence is the literal answer: yes/no, the cause, the verdict. Then at most one short sentence of why. Hard cap of 2 sentences per point; a multi-part question gets one short item per part; delete every sentence the question survives without, and if I want more I'll ask
 - Every ⚠️/🚨 item says the problem in plain words and what you recommend
 - Include an example — text, code, table — only when it genuinely beats a prose-only answer, and keep it short
 - Number every table's rows in a leading `#` column, starting at 1
