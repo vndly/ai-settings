@@ -10,7 +10,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 
 - Before making changes, read the relevant files, dependencies, tests, existing patterns and documentation
 - For ambiguous, risky, or unclear tasks, ask when info is missing; otherwise state your assumptions
-- Give a short, direct summary of your understanding
+- Before starting non-trivial work, say in one line how you read the request and its scope, including what you won't do (e.g. "Reading 'the fix' as the one in the report; Phase 1 only"). If two readings lead to different work, ask instead. Skip this for small, clear tweaks
 
 ## Plan
 
