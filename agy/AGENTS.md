@@ -81,6 +81,6 @@ No headers, no preamble, no restated conclusions, no closing offers.
 - When a message just contains "short", run the `short` skill
 - When a message just contains "resolve", run the `resolve` skill
 - When a message just contains "commit message", run the `commit-message` skill
-- Never weaken validation, authentication, authorization, error handling, or security checks unless explicitly requested
+- Never weaken validation, authentication, authorization, error handling
 - Never create a branch, commit, or push without my permission
 - Never create a GitHub repository without my permission
