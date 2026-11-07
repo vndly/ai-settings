@@ -18,8 +18,6 @@ enabled = true
 
 [tui]
 whimsy = false
-
-[tui]
 alternate_screen = "always"
 notifications = true
 notification_condition = "always"
