@@ -21,7 +21,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 ## Implement
 
 - Follow the approved plan; if you need to deviate, stop and say so first
-- Make the smallest change that fully solves the request: no speculative features, abstractions, unrequested refactors, or edits to unrelated files.
+- Make the smallest change that fully solves the request: no speculative features, abstractions, unrequested refactors, or edits to unrelated files. Reuse existing code instead of duplicating it
 - Prioritize correctness, readability, maintainability, and clarity over cleverness or brevity
 - Follow the codebase's existing architecture, naming, formatting, conventions, and test patterns, even if you'd do it differently
 - When something fails, don't immediately rewrite — analyze the error, state a hypothesis, then confirm the fix actually addresses it
