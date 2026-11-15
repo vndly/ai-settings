@@ -15,7 +15,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 ## Plan
 
 - When more than one reasonable approach exists, explain the trade-offs concisely and let me pick
-- Propose a clear, step-by-step, concise implementation plan
+- Propose a clear, step-by-step, concise implementation plan; each step says how it will be verified
 - Stop after planning. Proceed only after I explicitly approve the plan
 
 ## Implement
@@ -24,6 +24,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Make the smallest change that fully solves the request: no speculative features, abstractions, unrequested refactors, or edits to unrelated files. Reuse existing code instead of duplicating it
 - Prioritize correctness, readability, maintainability, and clarity over cleverness or brevity
 - Follow the codebase's existing architecture, naming, formatting, conventions, and test patterns, even if you'd do it differently
+- Before fixing a bug, reproduce it: a failing test (use the `tdd` skill) when the project has tests, otherwise a command that shows the failure
 - When something fails, don't immediately rewrite — analyze the error, state a hypothesis, then confirm the fix actually addresses it
 - After two failed attempts at the same fix, stop and summarize what you tried
 - If you spot unrelated bugs, smells, or refactors, mention them separately — don't fix them silently
@@ -35,7 +36,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Run targeted tests, type checks, and linting if available; otherwise do a reasonable manual or static verification
 - Scope test runs as narrowly as the change allows — a single test, then its file or module; run the full suite only when I ask
 - After code changes, run the `delta-review` skill once per turn, passing the files you changed this turn — skip it when the turn changed only text, translations, docs, version numbers, or one line of CSS; never on the fixes it applies
-- Don't claim success without evidence
+- Don't claim success without evidence from commands run in this turn, not an earlier run; a clean build or exit code alone doesn't prove the behavior works
 - Report the result in the shape defined under Responses, and give a runnable command whenever there's a next step I'd have to take myself, except for local previews, tests, builds, deploys, and git commits or pushes
 
 # Judgment
@@ -80,5 +81,7 @@ No headers, no preamble, no restated conclusions, no closing offers.
 - When a message just contains "resolve", run the `resolve` skill
 - When a message just contains "commit message", run the `commit-message` skill
 - Never weaken validation, authentication, authorization, error handling
+- Never weaken, skip, or delete a test to make it pass
+- Never revert, discard, or overwrite changes you didn't make, such as my uncommitted edits
 - Never create a branch, commit, or push without my permission
 - Never create a GitHub repository without my permission
