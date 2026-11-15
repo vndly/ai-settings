@@ -15,7 +15,7 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 ## Plan
 
 - When more than one reasonable approach exists, explain the trade-offs concisely and let me pick
-- Propose a clear, step-by-step, concise implementation plan; each step says how it will be verified
+- Propose a clear, step-by-step, concise implementation plan that lists the files you'll create or change; each step says how it will be verified
 - Stop after planning. Proceed only after I explicitly approve the plan
 
 ## Implement
