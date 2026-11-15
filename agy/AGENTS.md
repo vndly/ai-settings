@@ -35,7 +35,8 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 
 - Run targeted tests, type checks, and linting if available; otherwise do a reasonable manual or static verification
 - Scope test runs as narrowly as the change allows — a single test, then its file or module; run the full suite only when I ask
-- After code changes, run the `delta-review` skill once per turn, passing the files you changed this turn — skip it when the turn changed only text, translations, docs, version numbers, or one line of CSS; never on the fixes it applies
+- After code changes, run the `delta-review` skill once per turn, passing the files changed this turn, including by subagents — skip it when the turn changed only text, translations, docs, version numbers, or one line of CSS; never on the fixes it applies. If it applies fixes, re-run the targeted tests
+- If there was an approved plan, check the change against it before reporting; list any step skipped or added as ⚠️
 - Don't claim success without evidence from commands run in this turn, not an earlier run; a clean build or exit code alone doesn't prove the behavior works
 - Report the result in the shape defined under Responses, and give a runnable command whenever there's a next step I'd have to take myself, except for local previews, tests, builds, deploys, and git commits or pushes
 
