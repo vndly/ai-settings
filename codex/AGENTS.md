@@ -33,7 +33,8 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 
 ## Verify
 
-- Run targeted tests, type checks, and linting if available; otherwise do a reasonable manual or static verification
+- Run targeted tests, type checks, and linting if available; otherwise run a command or small script that exercises the change, and fall back to static review only when nothing can run
+- Verify without changing real data or shared environments: prefer dry runs, emulators, local instances, or read-only checks
 - Scope test runs as narrowly as the change allows — a single test, then its file or module; run the full suite only when I ask
 - After code changes, run the `delta-review` skill once per turn, passing the files changed this turn, including by subagents — skip it when the turn changed only text, translations, docs, version numbers, or one line of CSS; never on the fixes it applies. If it applies fixes, re-run the targeted tests
 - If there was an approved plan, check the change against it before reporting; list any step skipped or added as ⚠️
