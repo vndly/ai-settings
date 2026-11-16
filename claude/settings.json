@@ -89,6 +89,7 @@
   },
   "effortLevel": "high",
   "tui": "fullscreen",
+  "idleCompaction": false,
   "autoMemoryEnabled": false,
   "remoteControlAtStartup": true,
   "skipWorkflowUsageWarning": true,
