@@ -2,7 +2,7 @@
   "allowNonWorkspaceAccess": true,
   "colorScheme": "dark",
   "internetAccessPolicy": "allow",
-  "model": "Gemini 4 Hydrogen (XHigh)",
+  "model": "Gemini 4 Neon (XHigh)",
   "notifications": true,
   "statusLine": {
     "enabled": true,
