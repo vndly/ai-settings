@@ -54,6 +54,21 @@ Never skip the bookends (Explore, Verify); Plan is optional only for trivial cha
 - Subagents are pre-authorized and preferred. Delegate to the Agent tool whenever a task fits an available agent type. Never wait for me to ask.
 - If something still blocks delegation, stop and use `AskUserQuestion` to ask whether to launch the subagent. Never silently run the task inline instead.
 
+# Artifact
+
+- Use an artifact when I ask for alternatives, a preview, or a look-and-feel check. Build it in the scratchpad, change nothing in the repo until I pick; it needs no plan approval
+- Show labelled options (A, B, C…), with today's version as A when one exists, and mark your recommendation
+- Make it look like the real product: the project's own assets, styles, fonts, rendering and data, at the sizes they appear in the app
+- Cover every case the change touches (each state, element, screen size); animations loop side by side with speed and scrub controls
+- Add a mixer when the choice is a matter of degree (size, color, strength, timing, spacing); skip it when the options are distinct designs
+- A mixer has a Copy button that outputs the settings as text I can paste back to you, and a Load field that restores the mixer from that text
+- A new round on the same subject updates the same artifact and keeps the previous round on the page, collapsed; a new subject gets a new artifact
+- When I build on an option, change only what I asked for; everything else stays identical to that option
+- Keep the artifact in step with decisions made later in the session; if one makes it stale, update it or tell me
+- When I send a mixer configuration (copied text or screenshots), read it back as a table and stop; plan only when I ask
+- After publishing, reply with the link, what opens first, a numbered table of the options, and your pick
+- When a plan or handoff file records a decision made in an artifact, include its link
+
 # Responses
 
 Substantive replies — work reported, findings, a review or plan — use this shape. Acknowledgments, one-liners, mid-task check-ins, answers to my questions, inquiries, explanations, comparisons and `AskUserQuestion` turns answer plainly instead.
